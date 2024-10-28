@@ -15,8 +15,8 @@ int main(int argc, char *argv[]){
     cxxopts::Options options("opensplat", "Open Source 3D Gaussian Splats generator - " APP_VERSION);
     options.add_options()
         ("i,input", "Path to nerfstudio project", cxxopts::value<std::string>())
-        ("o,output", "Path where to save output scene", cxxopts::value<std::string>()->default_value("splat.ply"))
-        ("s,save-every", "Save output scene every these many steps (set to -1 to disable)", cxxopts::value<int>()->default_value("-1"))
+        ("o,output", "Path where to save output scene", cxxopts::value<std::string>()->default_value("splat.splat"))
+        ("s,save-every", "Save output scene every these many steps (set to -1 to disable)", cxxopts::value<int>()->default_value("100"))
         ("val", "Withhold a camera shot for validating the scene loss")
         ("val-image", "Filename of the image to withhold for validating scene loss", cxxopts::value<std::string>()->default_value("random"))
         ("val-render", "Path of the directory where to render validation images", cxxopts::value<std::string>()->default_value(""))
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
 
 
     const std::string projectRoot = result["input"].as<std::string>();
-    const std::string outputScene = result["output"].as<std::string>();
+    const std::string outputScene = (std::filesystem::path(projectRoot) / "splat.splat").string();
     const int saveEvery = result["save-every"].as<int>(); 
     const bool validate = result.count("val") > 0 || result.count("val-render") > 0;
     const std::string valImage = result["val-image"].as<std::string>();
